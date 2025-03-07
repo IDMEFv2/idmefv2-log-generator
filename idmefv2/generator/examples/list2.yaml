@@ -1,0 +1,13 @@
+playlist:
+  mode: sequential
+  delay: 2
+  repeat: false
+  templates:
+    - string: "one"
+    - string: "{{number}}"
+      vars:
+        number: two
+    - string: "three"
+    - string: "{{number}}"
+      vars:
+        number: four

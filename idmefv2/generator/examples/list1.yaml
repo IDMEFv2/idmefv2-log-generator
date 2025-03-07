@@ -1,0 +1,8 @@
+playlist:
+  mode: sequential
+  delay: 1
+  templates:
+    - file: test1.j2
+    - string: "foo:{{bar}}"
+      vars:
+        bar: 123
