@@ -1,0 +1,42 @@
+[project]
+name = "idmefv2-log-generator"
+version = "0.0.1"
+dependencies = [
+    'jinja2',
+    'pyyaml',
+    'requests',
+    'schema',
+]
+requires-python = ">=3.10"
+authors = [
+  {name = "François Déchelle"},
+]
+description = "A versatile generator playing jinja2 templates that contain either IDMEFv2 or log messages"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["IDMEFv2"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Security"
+]
+
+[project.urls]
+Homepage = "https://www.idmefv2.org"
+Repository = "https://github.com/IDMEFv2/idmefv2-log-generator"
+"Bug Tracker" = "https://github.com/IDMEFv2/idmefv2-log-generator/issues"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+#[tool.setuptools.package-data]
+#'idmefv2.generator' = ["*.j2"]
