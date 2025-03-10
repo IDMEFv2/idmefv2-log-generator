@@ -1,0 +1,23 @@
+{% set name = random_string(10) %}
+{
+  "Version" : "2.D.V03",
+  "ID" : "{{ uuid() }}",
+  "CreateTime" : "{{ now() }}",
+  "Analyzer" : {
+    "IP" : "{{ random_ipv4() }}",
+    "Name" : "{{ name }}",
+    "Model" : "generic",
+    "Category" : [ "LOG" ],
+    "Data" : [ "Log" ],
+    "Method" : [ "Monitor" ]
+  },
+  "Sensor" : [ {
+    "IP" : "{{ random_ipv4(True) }}",
+    "Name" : "TheSensor",
+    "Model" : "TheSensorModel"
+  }, {
+    "IP" : "{{ random_ipv6(True) }}",
+    "Name" : "TheSensor2",
+    "Model" : "TheSensor2Model"
+  } ]
+}

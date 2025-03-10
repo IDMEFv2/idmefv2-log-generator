@@ -1,0 +1,4 @@
+playlist:
+  templates:
+    - file: test2.j2
+    - file: test1.j2
