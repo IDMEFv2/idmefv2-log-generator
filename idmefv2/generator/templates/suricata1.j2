@@ -1,0 +1,44 @@
+{
+  "Version": "2.D.V04",
+  "ID": "{{ uuid() }}",
+  "CreateTime": "{{ now() }}",
+  "Category": [
+    "Recon.Scanning"
+  ],
+  "Priority": "Low",
+  "Description": "Potentially Bad Traffic",
+  "Analyzer": {
+    "IP": "127.0.0.1",
+    "Name": "suricata",
+    "Model": "Suricata NIDS",
+    "Type": "Cyber",
+    "Category": [
+      "NIDS"
+    ],
+    "Data": [
+      "Network"
+    ],
+    "Method": [
+      "Signature"
+    ]
+  },
+  "Source": [
+    {
+      "IP": "{{ random_ipv4(True) }}",
+      "Port": [
+        50096
+      ],
+      "Protocol": [
+        "TCP"
+      ]
+    }
+  ],
+  "Target": [
+    {
+      "IP": "{{ random_ipv6(True) }}",
+      "Port": [
+        80
+      ]
+    }
+  ]
+}

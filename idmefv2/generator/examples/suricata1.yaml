@@ -1,0 +1,5 @@
+playlist:
+  delay: 2
+  repeat: true
+  templates:
+    - file: suricata1.j2
