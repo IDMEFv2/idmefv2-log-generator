@@ -1,5 +1,6 @@
 import abc
 import argparse
+import requests
 
 # pylint: disable=too-few-public-methods
 class Player(abc.ABC):
@@ -39,7 +40,7 @@ class RecordPlayer(Player, list):
     def play(self, rendered: str):
         self.append(rendered)
 
-class URLPlayer(Player, list):
+class URLPlayer(Player):
     '''a player that makes a HTTP POST request with rendered template as JSON'''
     def __init__(self, options: argparse.Namespace):
         self._url = options.url
@@ -47,7 +48,11 @@ class URLPlayer(Player, list):
         self._password = options.password
 
     def play(self, rendered: str):
-        self.append(rendered)
+        kwargs = {'headers': {'Content-Type': 'application/json'}, 'data': rendered, 'timeout': 30.0}
+        if self._user is not None and self._password is not None:
+            kwargs['auth'] = (self._user, self._password)
+        r = requests.post(self._url, **kwargs)
+        print(r)
 
     @classmethod
     def add_argument(cls, parser: argparse.ArgumentParser):
