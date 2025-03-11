@@ -53,7 +53,7 @@ class RecordPlayer(Player, list):
         self.append(rendered)
 
 class URLPlayer(Player):
-    '''a player that makes a HTTP POST request with rendered template as JSON'''
+    '''a player that makes a HTTP POST request with JSON rendered template'''
     def __init__(self, options: argparse.Namespace):
         self._url = options.url
         self._user = options.user
