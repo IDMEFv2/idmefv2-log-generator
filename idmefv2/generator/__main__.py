@@ -1,3 +1,7 @@
+'''
+Main script for the generator.
+Parse command line options, load the play list and play it.
+'''
 import argparse
 import importlib
 import inspect
