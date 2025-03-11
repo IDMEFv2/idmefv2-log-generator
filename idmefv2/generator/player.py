@@ -25,7 +25,7 @@ class Player(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def add_argument(cls, parser: argparse.ArgumentParser):
+    def add_argument(cls, parser: argparse.ArgumentParser = None):
         '''
         Add command line option specific to the player.
         Must call parser.add_argument() to add options.
@@ -38,7 +38,7 @@ class Player(abc.ABC):
 class PrintPlayer(Player):
     '''a player that prints the rendered template'''
 
-    def __init__(self, options: argparse.Namespace):
+    def __init__(self, options: argparse.Namespace = None):
         pass
 
     def play(self, rendered: str):
@@ -46,7 +46,7 @@ class PrintPlayer(Player):
 
 class RecordPlayer(Player, list):
     '''a player that records the rendered template in a list'''
-    def __init__(self, options: argparse.Namespace):
+    def __init__(self, options: argparse.Namespace = None):
         pass
 
     def play(self, rendered: str):
@@ -71,7 +71,7 @@ class URLPlayer(Player):
         print(r)
 
     @classmethod
-    def add_argument(cls, parser: argparse.ArgumentParser):
+    def add_argument(cls, parser: argparse.ArgumentParser = None):
         parser.add_argument('-u', '--url',
                             help='(URLPlayer only) URL for the POST request',
                             dest='url')
