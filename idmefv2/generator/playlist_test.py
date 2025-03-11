@@ -3,8 +3,8 @@
 Tests of PlayList
 '''
 import io
-from idmefv2.generator.playlist import PlayList
-from idmefv2.generator.player import RecordPlayer
+from .playlist import PlayList
+from .player import RecordPlayer
 
 
 def test_playlist1():
