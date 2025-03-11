@@ -25,7 +25,7 @@ class PlayList:
     playlist:
       mode: sequential
       delay: 1
-      templates:
+      tracks:
         - file: test1.j2
         - string: "foo:{{bar}}"
           vars:
