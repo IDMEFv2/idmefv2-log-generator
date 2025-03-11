@@ -9,7 +9,7 @@ A play list is given as a yaml document, specifying the templates to "play", how
 The following prerequisites must be installed on your system to install and use this library:
 
 - Python 3.10 or later
-- The Python [setuptools](https://pypi.org/project/setuptools/) package (usually available as a system package under the name `python3-setuptools`)
+- Python [setuptools](https://pypi.org/project/setuptools/) package (usually available as a system package under the name `python3-setuptools`)
 
 Python dependencies are:
 - jinja2
@@ -40,7 +40,7 @@ This will install as well the dependencies.
 
 To install using TestPyPI, use the following command:
 
-```
+``` sh
 pip install --extra-index-url https://test.pypi.org/simple/ idmefv2-log-generator
 ```
 
@@ -86,13 +86,16 @@ playlist:
 
 Templates are **jinja2** templates. For more information on jinja2, refer to documentation https://jinja.palletsprojects.com/en/stable/
 
+### Players
+
 Playing the playlist consists of:
 
-- loading the templates that are defined as `file`
-- if mode is random, shuffle the tracks
-- for each track:
+1. loading the templates that are defined as `file`
+2. if mode is random, shuffle the tracks
+3. for each track:
   - render the associated template with the variables that may be associated
   - pass the result of rendering to a *player*
+4. repeat steps 2 and 3 if playlist `repeat` is True
 
 Players are Python class that define a `play(self, rendered: str)` method which receives the result of rendering.
 
@@ -101,16 +104,18 @@ Available players are:
 - `RecordPlayer`: a player that records the rendered template in a list
 - `URLPlayer`: a player that makes a HTTP POST request with rendered template supposed to be JSON
 
+### Helper functions
+
 When defining a template, helpers functions can be used:
-- `now()`: Returns current date and time
+- `now()`: returns current date and time
 - `uuid()`: returns a UUID 4
-- `random_ipv4(exclude_reserved: bool = False)`: returns a random IPV4 address; if `exclude_reserved` (bool, optional)is True, exclude IETF reserved address
-- `random_ipv6(exclude_reserved: bool = False)`: returns a random IPV6 address; if `exclude_reserved` (bool, optional)is True, exclude IETF reserved address
-- `random_string(length: int = 5)`: returns a random string of lowercase letters; length (int, optional) gives the length of the string and defaults to 5
+- `random_ipv4(exclude_reserved: bool = False)`: returns a random IPV4 address; if `exclude_reserved` (bool, optional) is True, exclude IETF reserved address
+- `random_ipv6(exclude_reserved: bool = False)`: returns a random IPV6 address; if `exclude_reserved` (bool, optional) is True, exclude IETF reserved address
+- `random_string(length: int = 5)`: returns a random string of lowercase letters; `length` (int, optional) gives the length of the string and defaults to 5
 
 An example of using helpers functions in template:
 
-``` yaml
+``` jinja
 {% set name = random_string(10) %}
 {
   "Version" : "2.D.V03",
@@ -126,7 +131,7 @@ An example of using helpers functions in template:
 
 The Python package `idmefv2.generator` is directly runnable:
 
-```
+``` sh
 python -m idmefv2.generator -h
 usage: __main__.py [-h] [-t TEMPLATE_PATH] [-p PLAYER_CLASS] [-u URL] [-U USER] [-P PASSWORD] playlist
 
@@ -156,7 +161,7 @@ options:
 ```
 An example of running the generator with a `PrintPlayer`:
 ``` sh
-python -m idmefv2.generator -t ./idmefv2/generator/examples/templates/ -p PrintPlayer ./idmefv2/generator/examples/list3.yaml
+python -m idmefv2.generator -t ./idmefv2/generator/examples/templates/:$HOME/tmp/templates -p PrintPlayer ./idmefv2/generator/examples/list3.yaml
 two
 one
 four
@@ -185,7 +190,7 @@ playlist:
         number: four
 ```
 
-An example of running the generator with a `URLLayer`:
+An example of running the generator with a `URLPlayer`:
 ```
 python -m idmefv2.generator -p URLPlayer -u http://A.B.C.D/ -U XXX -P XXX -t ./idmefv2/generator/examples/templates/ ./idmefv2/generator/examples/suricata1.yaml
 ```
