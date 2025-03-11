@@ -1,6 +1,6 @@
 playlist:
   mode: random
   delay: 2
-  templates:
+  tracks:
     - file: test2.j2
     - file: test1.j2

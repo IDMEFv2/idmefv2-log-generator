@@ -2,6 +2,6 @@ playlist:
   mode: random
   delay: 3
   template_path: 'idmefv2/generator/templates/'
-  templates:
+  tracks:
     - file: test1.j2
     - file: test1.j2

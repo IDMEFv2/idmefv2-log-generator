@@ -2,7 +2,7 @@ playlist:
   mode: random
   delay: 2
   repeat: true
-  templates:
+  tracks:
     - string: "one"
     - string: "{{number}}"
       vars:
