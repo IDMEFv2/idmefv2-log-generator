@@ -17,6 +17,7 @@ class PlayList:
     The yaml file contains a unique playlist key, having the following sub-keys;
     - mode (str): sequential or random, defaults to sequential
     - delay (int): delay between each track, defaults to 0
+    - repeat (bool): shall the playlist loop or play only once, defaults to False
     - tracks: list of objects having the following keys:
       - file or string (str, exclusive): if file, name of template file, else template
       - vars (dict): variables for template rendering, defaults to {}
