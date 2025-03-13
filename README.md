@@ -162,7 +162,7 @@ options:
 
 An example of running the generator with a `PrintPlayer`:
 ``` sh
-python -m idmefv2.generator -t ./idmefv2/generator/examples/templates/:$HOME/tmp/templates -p PrintPlayer ./idmefv2/generator/examples/list3.yaml
+python -m idmefv2.generator -t ./examples/templates/:$HOME/tmp/templates -p PrintPlayer ./examples/list3.yaml
 two
 one
 four
@@ -193,7 +193,7 @@ playlist:
 
 An example of running the generator with a `URLPlayer`:
 ``` sh
-python -m idmefv2.generator -p URLPlayer -u http://A.B.C.D/ -U XXX -P XXX -t ./idmefv2/generator/examples/templates/ ./idmefv2/generator/examples/suricata1.yaml
+python -m idmefv2.generator -p URLPlayer -u http://A.B.C.D/ -U XXX -P XXX -t ./examples/templates/ ./examples/suricata1.yaml
 ```
 
 ## Contributions​
