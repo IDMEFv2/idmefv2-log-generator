@@ -1,15 +1,25 @@
 '''
 Helper functions that can be called from a jinja2 template
 '''
-from datetime import datetime
+from datetime import datetime, timezone
 import ipaddress
 import random
 import string
 from uuid import uuid4
 
-def now() -> str:
-    '''Returns current date and time'''
-    return datetime.now().isoformat('T')
+def now(use_utc: bool = False) -> str:
+    '''
+    Returns current date and time in ISO 8601 format, including timezone
+
+    Args:
+        use_utc (bool, optional): if True the returned value will use the UTC timezone,
+        otherwise it will use the local timezone. Defaults to False.
+
+    Returns:
+        str: current date and time in ISO 8601 format, including timezone
+    '''
+    n = datetime.now(timezone.utc) if use_utc else datetime.now().astimezone()
+    return n.isoformat()
 
 def uuid() -> str :
     '''Returns a UUID 4'''

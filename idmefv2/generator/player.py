@@ -3,6 +3,8 @@ Module containing all players
 '''
 import abc
 import argparse
+import io
+import sys
 import requests
 
 # pylint: disable=too-few-public-methods
@@ -38,11 +40,11 @@ class Player(abc.ABC):
 class PrintPlayer(Player):
     '''a player that prints the rendered template'''
 
-    def __init__(self, options: argparse.Namespace = None):
-        pass
+    def __init__(self, _: argparse.Namespace = None, out: io.TextIOBase = sys.stdout):
+        self._out = out
 
     def play(self, rendered: str):
-        print(rendered)
+        print(rendered, file=self._out)
 
 class RecordPlayer(Player, list):
     '''a player that records the rendered template in a list'''
