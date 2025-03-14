@@ -107,7 +107,7 @@ Available players are:
 ### Helper functions
 
 When defining a template, helpers functions can be used:
-- `now()`: returns current date and time
+- `now(use_utc: bool = False)`: returns current date and time in ISO 8601 format, including timezone; if `use_utc` (bool, optional) is True, the returned value will use the UTC timezone, otherwise it will use the local timezone
 - `uuid()`: returns a UUID 4
 - `random_ipv4(exclude_reserved: bool = False)`: returns a random IPV4 address; if `exclude_reserved` (bool, optional) is True, exclude IETF reserved address
 - `random_ipv6(exclude_reserved: bool = False)`: returns a random IPV6 address; if `exclude_reserved` (bool, optional) is True, exclude IETF reserved address
