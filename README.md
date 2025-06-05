@@ -56,7 +56,7 @@ PYTHONPATH=... pytest -vv
 
 at the root of the cloned repository, after adjusting `PYTHONPATH`.
 
-## Examples​
+## Play lists
 
 ### YAML play list format
 
@@ -85,25 +85,6 @@ playlist:
 ```
 
 Templates are **jinja2** templates. For more information on jinja2, refer to documentation https://jinja.palletsprojects.com/en/stable/
-
-### Players
-
-Playing the playlist consists of:
-
-1. loading the templates that are defined as `file`
-2. if mode is random, shuffle the tracks
-3. for each track:
-  - render the associated template with the variables that may be associated
-  - pass the result of rendering to a *player*
-4. repeat steps 2 and 3 if playlist `repeat` is True
-
-Players are Python class that define a `play(self, rendered: str)` method which receives the result of rendering.
-
-Available players are:
-- `PrintPlayer`: a player that prints the rendered template
-- `RecordPlayer`: a player that records the rendered template in a list
-- `URLPlayer`: a player that makes a HTTP POST request with rendered template supposed to be JSON
-- `SyslogPlayer`: a player that logs the rendered template using syslog
 
 ### Helper functions
 
@@ -165,6 +146,27 @@ options:
   --user USER           (URLPlayer only) user if URL requires authentication
   --password PASSWORD   (URLPlayer only) password if URL requires authentication
 ```
+
+### Players
+
+Playing the playlist consists of:
+
+1. loading the templates that are defined as `file`
+2. if mode is random, shuffle the tracks
+3. for each track:
+  - render the associated template with the variables that may be associated
+  - pass the result of rendering to a *player*
+4. repeat steps 2 and 3 if playlist `repeat` is True
+
+Players are Python class that define a `play(self, rendered: str)` method which receives the result of rendering.
+
+Available players are:
+- `PrintPlayer`: a player that prints the rendered template
+- `RecordPlayer`: a player that records the rendered template in a list
+- `URLPlayer`: a player that makes a HTTP POST request with rendered template supposed to be JSON
+- `SyslogPlayer`: a player that logs the rendered template using syslog
+
+### Examples
 
 An example of running the generator with a `PrintPlayer`:
 ``` sh
