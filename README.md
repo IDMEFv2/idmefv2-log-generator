@@ -103,6 +103,7 @@ Available players are:
 - `PrintPlayer`: a player that prints the rendered template
 - `RecordPlayer`: a player that records the rendered template in a list
 - `URLPlayer`: a player that makes a HTTP POST request with rendered template supposed to be JSON
+- `SyslogPlayer`: a player that logs the rendered template using syslog
 
 ### Helper functions
 
@@ -133,7 +134,9 @@ The Python package `idmefv2.generator` is directly runnable:
 
 ``` sh
 python -m idmefv2.generator -h
-usage: __main__.py [-h] [-t TEMPLATE_PATH] [-p PLAYER_CLASS] [-u URL] [-U USER] [-P PASSWORD] playlist
+usage: __main__.py [-h] [-t TEMPLATE_PATH] [-p PLAYER_CLASS] [--ident IDENT]
+                   [--priority PRIORITY] [--url URL] [--user USER] [--password PASSWORD]
+                   playlist
 
 play a playlist defined by a .yaml file
 
@@ -143,6 +146,7 @@ playing a template means rendering it and passing the result to a player
 available player Python classes are:
 - PrintPlayer     a player that prints the rendered template
 - RecordPlayer    a player that records the rendered template in a list
+- SyslogPlayer    a player that logs the rendered template using syslog
 - URLPlayer       a player that makes a HTTP POST request with JSON rendered template
 
 positional arguments:
@@ -154,10 +158,12 @@ options:
                         list of directories containing templates
   -p PLAYER_CLASS, --player_class PLAYER_CLASS
                         player Python class
-  -u URL, --url URL     (URLPlayer only) URL for the POST request
-  -U USER, --user USER  (URLPlayer only) user if URL requires authentication
-  -P PASSWORD, --password PASSWORD
-                        (URLPlayer only) password if URL requires authentication
+  --ident IDENT         (SyslogPlayer only) ident, a string which is prepended to every message
+  --priority PRIORITY   (SyslogPlayer only) message priority, must be one of ['emergency',
+                        'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']
+  --url URL             (URLPlayer only) URL for the POST request
+  --user USER           (URLPlayer only) user if URL requires authentication
+  --password PASSWORD   (URLPlayer only) password if URL requires authentication
 ```
 
 An example of running the generator with a `PrintPlayer`:
@@ -194,6 +200,19 @@ playlist:
 An example of running the generator with a `URLPlayer`:
 ``` sh
 python -m idmefv2.generator -p URLPlayer -u http://A.B.C.D/ -U XXX -P XXX -t ./examples/templates/ ./examples/suricata1.yaml
+```
+
+An example of running the generator with a `SyslogPlayer`:
+``` sh
+python -m idmefv2.generator -p SyslogPlayer --ident safe4soc --priority error ./examples/list2.yaml
+```
+
+and running in parallel `tail -f /var/log/syslog` in another shell:
+```sh
+2025-06-05T16:32:34.351854+02:00 mimi safe4soc[344732]: one
+2025-06-05T16:32:36.352554+02:00 mimi safe4soc[344732]: two
+2025-06-05T16:32:38.352960+02:00 mimi safe4soc[344732]: three
+2025-06-05T16:32:40.352853+02:00 mimi safe4soc[344732]: four
 ```
 
 ## Contributions​

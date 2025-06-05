@@ -5,6 +5,7 @@ import abc
 import argparse
 import io
 import sys
+import syslog
 import requests
 
 # pylint: disable=too-few-public-methods
@@ -61,7 +62,6 @@ class URLPlayer(Player):
         self._user = options.user
         self._password = options.password
 
-    # pylint: disable=missing-timeout
     def play(self, rendered: str):
         kwargs = {}
         kwargs['headers'] = {'Content-Type': 'application/json'}
@@ -69,17 +69,51 @@ class URLPlayer(Player):
         kwargs['timeout'] = 30.0
         if self._user is not None and self._password is not None:
             kwargs['auth'] = (self._user, self._password)
+        # pylint: disable=missing-timeout
         r = requests.post(self._url, **kwargs)
         print(r)
 
     @classmethod
     def add_argument(cls, parser: argparse.ArgumentParser = None):
-        parser.add_argument('-u', '--url',
+        parser.add_argument('--url',
                             help='(URLPlayer only) URL for the POST request',
                             dest='url')
-        parser.add_argument('-U', '--user',
+        parser.add_argument('--user',
                             help='(URLPlayer only) user if URL requires authentication',
                             dest='user')
-        parser.add_argument('-P', '--password',
+        parser.add_argument('--password',
                             help='(URLPlayer only) password if URL requires authentication',
                             dest='password')
+
+class SyslogPlayer(Player):
+    '''a player that logs the rendered template using syslog'''
+
+    _PRIORITIES = {
+        'emergency': syslog.LOG_EMERG,
+        'alert': syslog.LOG_ALERT,
+        'critical': syslog.LOG_CRIT,
+        'error': syslog.LOG_ERR,
+        'warning': syslog.LOG_WARNING,
+        'notice': syslog.LOG_NOTICE,
+        'info': syslog.LOG_INFO,
+        'debug': syslog.LOG_DEBUG,
+    }
+
+    def __init__(self, options: argparse.Namespace = None):
+        self._ident = options.ident
+        self._priority = SyslogPlayer._PRIORITIES.get(options.priority, syslog.LOG_INFO)
+        syslog.openlog(self._ident, syslog.LOG_PID)
+
+    def play(self, rendered: str):
+        syslog.syslog(self._priority, rendered)
+
+    @classmethod
+    def add_argument(cls, parser: argparse.ArgumentParser = None):
+        # pylint: disable=line-too-long
+        parser.add_argument('--ident',
+                            help='(SyslogPlayer only) ident, a string which is prepended to every message',
+                            dest='ident')
+        priorities = list(SyslogPlayer._PRIORITIES.keys())
+        parser.add_argument('--priority',
+                            help=f"(SyslogPlayer only) message priority, must be one of {priorities}",
+                            dest='priority')
