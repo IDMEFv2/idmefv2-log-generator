@@ -5,11 +5,11 @@ name: Create or move the latest tag
 on:
   release:
     types:
-      - published
+#      - published
       - created
-      - edited
-      - prereleased
-      - released
+#      - edited
+#      - prereleased
+#      - released
 
 permissions:
   contents: write
