@@ -1,0 +1,20 @@
+# This workflow will move the 'latest' tag when a release is created
+
+name: Create or move the latest tag
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  tag-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: cardinalby/git-tag-action@master
+        env:
+          TAG: latest
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
