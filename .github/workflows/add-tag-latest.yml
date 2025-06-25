@@ -4,7 +4,12 @@ name: Create or move the latest tag
 
 on:
   release:
-    types: [created]
+    types:
+      -published
+      - created
+      - edited
+      - prereleased
+      - released
 
 permissions:
   contents: write
