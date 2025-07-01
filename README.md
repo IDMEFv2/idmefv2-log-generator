@@ -33,6 +33,16 @@ pip install --editable .
 
 This will install as well the dependencies.
 
+### Installation from packages
+
+`idmefv2-log-generator` provides packages currently hosted on [TestPyPI](https://test.pypi.org/).
+
+To install using TestPyPI, use the following command:
+
+``` sh
+pip install --extra-index-url https://test.pypi.org/simple/ idmefv2-log-generator
+```
+
 ### Installation from github
 
 `idmefv2-log-generator` releases can be installed directly from github repository without first cloning the repository. To install the latest release, run the following command:
