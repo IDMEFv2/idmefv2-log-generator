@@ -1,6 +1,6 @@
 [project]
 name = "idmefv2-log-generator"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
     'jinja2',
     'pyyaml',
