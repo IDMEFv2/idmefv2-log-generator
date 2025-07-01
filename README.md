@@ -19,29 +19,32 @@ Python dependencies are:
 
 ## Installation​
 
-### Installation from sources​
+### Installation from local sources​
 
 It is highly recommended to install the library in a Python *virtualenv* https://virtualenv.pypa.io/en/latest/, unless running inside a container.
 
 Installing the dependencies using `requirements.txt` is not supported; this repository provides a `pyproject.toml` which is the recommended alternative.
 
-To install all modules, simply run in the root directory of the git clone:
+To install all modules, after cloning the repository, simply run in the root directory of the git clone:
 
 ``` sh
-. /PATH/TO/YOUR/VIRTUALENV/bin/activate  # only if using a virtualenv
 pip install --editable .
 ```
 
 This will install as well the dependencies.
 
-### Installation from packages
+### Installation from github
 
-`idmefv2-log-generator` provides packages currently hosted on [TestPyPI](https://test.pypi.org/).
-
-To install using TestPyPI, use the following command:
+`idmefv2-log-generator` releases can be installed directly from github repository without first cloning the repository. To install the latest release, run the following command:
 
 ``` sh
-pip install --extra-index-url https://test.pypi.org/simple/ idmefv2-log-generator
+pip install git+https://github.com/IDMEFv2/idmefv2-log-generator@latest
+```
+
+It is also possible to install a specific release:
+
+``` sh
+pip install git+https://github.com/IDMEFv2/idmefv2-log-generator@V0.0.2
 ```
 
 ## Testing​

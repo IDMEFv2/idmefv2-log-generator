@@ -5,8 +5,8 @@ name: Create or move the latest tag
 on:
   release:
     types:
-#      - published
       - created
+#      - published
 #      - edited
 #      - prereleased
 #      - released
