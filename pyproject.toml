@@ -1,6 +1,6 @@
 [project]
 name = "idmefv2-log-generator"
-version = "0.0.2"
+dynamic = ["version"]
 dependencies = [
     'jinja2',
     'pyyaml',
@@ -32,11 +32,13 @@ Repository = "https://github.com/IDMEFv2/idmefv2-log-generator"
 "Bug Tracker" = "https://github.com/IDMEFv2/idmefv2-log-generator/issues"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.setuptools_scm]
 
 #[tool.setuptools.package-data]
 #'idmefv2.generator' = ["*.j2"]
