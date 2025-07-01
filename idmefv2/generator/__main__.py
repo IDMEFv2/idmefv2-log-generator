@@ -37,9 +37,9 @@ available player Python classes are:
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('playlist', help='yaml file defining the play list')
-    parser.add_argument('-t', '--template_path', help='list of directories containing templates',
+    parser.add_argument('-t', '--template-path', help='list of directories containing templates',
                         default='', dest='template_path')
-    parser.add_argument('-p', '--player_class', help='player Python class', dest='player_class')
+    parser.add_argument('-p', '--player-class', help='player Python class', dest='player_class')
     for cls in players_classes.values():
         cls.add_argument(parser)
     return parser.parse_args()

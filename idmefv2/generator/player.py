@@ -63,10 +63,11 @@ class URLPlayer(Player):
         self._password = options.password
 
     def play(self, rendered: str):
-        kwargs = {}
-        kwargs['headers'] = {'Content-Type': 'application/json'}
-        kwargs['data'] = rendered
-        kwargs['timeout'] = 30.0
+        kwargs = {
+            'headers': {'Content-Type': 'application/json'},
+            'data': rendered,
+            'timeout': 30.0
+        }
         if self._user is not None and self._password is not None:
             kwargs['auth'] = (self._user, self._password)
         # pylint: disable=missing-timeout
