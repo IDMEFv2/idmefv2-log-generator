@@ -52,7 +52,9 @@ class PlayList:
     def _validate(cls, data: dict) -> dict:
         return cls._SCHEMA.validate(data)
 
-    def __init__(self, f : io.TextIOBase):
+    def __init__(self,
+                 f : io.TextIOBase,
+                 dataset_entries: list | None = None):
         y = yaml.safe_load(f)
         validated = PlayList._validate(y)
         playlist = validated['playlist']
@@ -60,6 +62,7 @@ class PlayList:
         self._delay = playlist['delay']
         self._repeat = playlist['repeat']
         self._tracks = playlist['tracks']
+        self._dataset_entries = self._validate_dataset_entries(dataset_entries)
 
     class _Track:
         '''
@@ -81,14 +84,36 @@ class PlayList:
     def _load_tracks(self, template_path: list) -> list:
         env = Environment(loader=FileSystemLoader(template_path))
         env.globals.update(HELPER_FUNS)
-        tracks = []
+        base_tracks = []
         for t in self._tracks:
             if 'string' in t:
                 template = env.from_string(t['string'])
             else:
                 template = env.get_template(t['file'])
-            tracks.append(self._Track(template, t['vars']))
+            base_tracks.append((template, dict(t['vars'])))
+
+        tracks = []
+        if self._dataset_entries is None:
+            for template, vars_dict in base_tracks:
+                tracks.append(self._Track(template, vars_dict))
+        else:
+            for entry in self._dataset_entries:
+                for template, vars_dict in base_tracks:
+                    merged = dict(vars_dict)
+                    merged.update(entry)
+                    tracks.append(self._Track(template, merged))
         return tracks
+
+    @staticmethod
+    def _validate_dataset_entries(dataset_entries: list | None) -> list | None:
+        if dataset_entries is None:
+            return None
+        if not isinstance(dataset_entries, list):
+            raise ValueError('dataset must be a JSON array')
+        for entry in dataset_entries:
+            if not isinstance(entry, dict):
+                raise ValueError('dataset entries must be JSON objects')
+        return dataset_entries
 
     def _play_once(self, tracks: list, player: Player):
         if self._mode == 'random':

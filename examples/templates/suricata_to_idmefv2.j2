@@ -1,0 +1,50 @@
+{%- set alert_obj = alert if alert is defined else {} -%}
+{%- set severity_map = {1: "High", 2: "Medium", 3: "Low"} -%}
+{%- set severity = alert_obj.get('severity') if alert_obj else None -%}
+{%- set priority = severity_map.get(severity, "Medium") -%}
+{
+  "Version": "2.D.V04",
+  "ID": "{{ flow_id }}",
+  "Status": "{{ status | default('Incident') }}",
+  "OrganisationName": "{{ organisation_name | default('acme.eu') }}",
+  "CreateTime": "{{ timestamp }}",
+  "StartTime": "{{ timestamp }}",
+  "Cause": "{{ cause | default('Malicious') }}",
+  "Category": {{ [alert_obj.get('category', 'Recon.Scanning')] | tojson }},
+  "Priority": "{{ priority }}",
+  "Confidence": {{ confidence | default(0.9) }},
+  "Description": "{{ alert_obj.get('signature', 'Suricata alert detected') }}",
+  "Analyzer": {
+    "IP": "{{ analyzer_ip | default(src_ip, true) }}",
+    "Name": "{{ analyzer_name | default('Core router') }}",
+    "Hostname": "{{ analyzer_hostname | default('core-router.example.com') }}",
+    "Type": "{{ analyzer_type | default('Cyber') }}",
+    "Model": "{{ analyzer_model | default('Suricata Sensor') }}",
+    "Category": {{ analyzer_category | default(['NIDS']) | tojson }},
+    "Data": {{ analyzer_data | default(['Datagram']) | tojson }},
+    "Method": {{ analyzer_method | default(['signature']) | tojson }},
+    "GeoLocation": "{{ analyzer_geo | default('+48.75726,+2.299528,+65.1') }}",
+    "UnLocation": "{{ analyzer_unloc | default('GR ATH') }}",
+    "Location": "{{ analyzer_location | default('SBDX1') }}"
+  },
+  "Sensor": [
+    {
+      "IP": "{{ analyzer_ip | default(src_ip, true) }}",
+      "Name": "{{ analyzer_name | default('Core router') }}",
+      "CaptureZone": "{{ sensor_capture_zone | default('[{\"type\":\"ipv4-addr\",\"value\":\"172.17.0.0\"},{\"type\":\"ipv4-net-mask\",\"value\":\"255.255.0.0\"}]') }}"
+    }
+  ],
+  "Source": [
+    {
+      "IP": "{{ src_ip }}",
+      "Protocol": ["{{ proto | default('Unknown') }}"]
+    }
+  ],
+  "Target": [
+    {
+      "IP": "{{ dest_ip }}",
+      "Port": [{{ dest_port | default(0, true) }}],
+      "Location": "{{ target_location | default('Datacenter SBX1') }}"
+    }
+  ]
+}

@@ -99,6 +99,43 @@ playlist:
 
 Templates are **jinja2** templates. For more information on jinja2, refer to documentation https://jinja.palletsprojects.com/en/stable/
 
+### Datasets
+
+The generator can iterate over a dataset supplied on the command line via `-d/--dataset <file>`. Each record is merged with the `vars` defined in the YAML tracks, and every track is replayed once per dataset entry. Without the `--dataset` flag the playlist behaves as before (only the `vars` defined in YAML are used).
+
+Dataset files can be either a JSON array (`[{}, {}]`) or newline-delimited JSON with one object per line. We provide both formats as examples:
+- `examples/datasets/suricata_dataset.json`: a traditional JSON array of Suricata alerts.
+- `examples/datasets/fox_wazuh.json`: newline-delimited JSON (one Wazuh event per line).
+
+To help you map those datasets into IDMEFv2, the repository also includes ready-made playlists and templates:
+- `examples/templates/suricata_dataset_alert.j2` and `examples/templates/suricata_to_idmefv2.j2` (paired with `examples/list_suricata_dataset.yaml` or `examples/list_suricata_idmefv2.yaml`) turn Suricata alerts into concise lines or full IDMEFv2 incidents.
+- `examples/templates/wazuh_to_idmefv2.j2` (paired with `examples/list_wazuh_dataset.yaml`) converts Wazuh events into IDMEFv2 JSON.
+
+`examples/datasets/sample_alerts.json` illustrates the array format:
+
+```json
+[
+  {"alert_id": "alert-001", "severity": "high", "source_ip": "192.0.2.15"},
+  {"alert_id": "alert-002", "severity": "medium", "source_ip": "198.51.100.44"}
+]
+```
+
+To use a dataset with a track template:
+
+``` sh
+python -m idmefv2.generator -p PrintPlayer -t ./examples/templates -d ./examples/datasets/suricata_dataset.json ./examples/list_suricata_dataset.yaml
+```
+
+This command feeds every Suricata alert entry into `examples/templates/suricata_dataset_alert.j2`, producing a readable line per alert. Swap the playlist for `list_suricata_idmefv2.yaml` to render the same dataset with the IDMEFv2 template instead.
+
+For newline-delimited Wazuh logs:
+
+``` sh
+python -m idmefv2.generator -p PrintPlayer -t ./examples/templates -d ./examples/datasets/fox_wazuh.json ./examples/list_wazuh_dataset.yaml
+```
+
+Each JSON line in `fox_wazuh.json` is rendered independently by `wazuh_to_idmefv2.j2`, yielding IDMEFv2 incidents straight from the dataset.
+
 ### Helper functions
 
 When defining a template, helpers functions can be used:
@@ -128,9 +165,9 @@ The Python package `idmefv2.generator` is directly runnable:
 
 ``` sh
 python -m idmefv2.generator -h
-usage: __main__.py [-h] [-t TEMPLATE_PATH] [-p PLAYER_CLASS] [--ident IDENT]
-                   [--priority PRIORITY] [--url URL] [--user USER] [--password PASSWORD]
-                   playlist
+usage: __main__.py [-h] [-t TEMPLATE_PATH] [-p PLAYER_CLASS] [-d DATASET]
+                   [--ident IDENT] [--priority PRIORITY] [--url URL]
+                   [--user USER] [--password PASSWORD] playlist
 
 play a playlist defined by a .yaml file
 
@@ -152,6 +189,8 @@ options:
                         list of directories containing templates
   -p PLAYER_CLASS, --player_class PLAYER_CLASS
                         player Python class
+  -d DATASET, --dataset DATASET
+                        JSON dataset file applied globally to all tracks
   --ident IDENT         (SyslogPlayer only) ident, a string which is prepended to every message
   --priority PRIORITY   (SyslogPlayer only) message priority, must be one of ['emergency',
                         'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']
@@ -220,6 +259,12 @@ python -m idmefv2.generator -p URLPlayer -u http://A.B.C.D/ -U XXX -P XXX -t ./e
 An example of running the generator with a `SyslogPlayer`:
 ``` sh
 python -m idmefv2.generator -p SyslogPlayer --ident safe4soc --priority error ./examples/list2.yaml
+```
+
+An example of running the generator with a dataset-provided playlist:
+``` sh
+python -m idmefv2.generator -p PrintPlayer -t ./examples/templates -d ./examples/datasets/suricata_dataset.json ./examples/list_suricata_idmefv2.yaml
+
 ```
 
 and running in parallel `tail -f /var/log/syslog` in another shell:

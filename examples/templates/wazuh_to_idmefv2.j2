@@ -1,0 +1,44 @@
+{%- set rule_obj = rule if rule is defined else {} -%}
+{%- set agent_obj = agent if agent is defined else {} -%}
+{%- set severity_map = {0: "Info", 3: "Low", 5: "Medium", 7: "High"} -%}
+{%- set priority = severity_map.get(rule_obj.get('level'), "Medium") -%}
+{
+  "Version": "2.D.V04",
+  "ID": "{{ id | default(uuid()) }}",
+  "Status": "{{ status | default('Incident') }}",
+  "OrganisationName": "{{ organisation_name | default('acme.eu') }}",
+  "CreateTime": "{{ timestamp | default('@timestamp') }}",
+  "StartTime": "{{ timestamp | default('@timestamp') }}",
+  "Cause": "{{ cause | default('Malicious') }}",
+  "Category": {{ rule_obj.get('groups', ['Security.Event']) | tojson }},
+  "Priority": "{{ priority }}",
+  "Confidence": {{ confidence | default(0.7) }},
+  "Description": "{{ rule_obj.get('description', 'Wazuh alert detected') }}",
+  "Analyzer": {
+    "IP": "{{ manager.name | default('wazuh.manager') }}",
+    "Name": "{{ agent_obj.get('name', 'wazuh-agent') }}",
+    "Type": "Host",
+    "Model": "{{ decoder.name | default('wazuh') }}",
+    "Category": {{ ['HIDS'] | tojson }},
+    "Method": {{ ['signature'] | tojson }},
+    "Data": {{ rule_obj | tojson }}
+  },
+  "Sensor": [
+    {
+      "IP": "{{ agent_obj.get('ip', '0.0.0.0') }}",
+      "Name": "{{ agent_obj.get('name', 'wazuh-agent') }}"
+    }
+  ],
+  "Source": [
+    {
+      "IP": "{{ agent_obj.get('ip', '0.0.0.0') }}",
+      "Hostname": "{{ agent_obj.get('name', 'wazuh-agent') }}"
+    }
+  ],
+  "Target": [
+    {
+      "IP": "{{ location | default('localhost') }}",
+      "Port": [0]
+    }
+  ]
+}
