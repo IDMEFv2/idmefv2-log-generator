@@ -1,0 +1,5 @@
+playlist:
+  mode: sequential
+  delay: 0
+  tracks:
+    - file: wazuh_to_idmefv2.j2
